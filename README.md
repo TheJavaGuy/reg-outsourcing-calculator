@@ -126,13 +126,6 @@ Feedback, issues, and pull requests welcome.
 
 ---
 
-## Classification reference
-
-Full classification reference with regulatory framework mapping and checklists:  
-[`/docs/DORA_Classification_Reference_v2.docx`](./docs/)
-
----
-
 ## Built by
 
 [Jelena Tanovic Milosavljevic] https://www.linkedin.com/in/jelena-tanovic-milosavljevic/ — Outsourcing Manager| Vibe coded with curiosity and caffeine.
