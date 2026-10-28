@@ -77,12 +77,12 @@ function renderLanding(container) {
       </div>
       <div class="landing-question-label">What type of classification is this?</div>
       <div class="landing-choice-grid">
-        <button class="landing-choice-btn" onclick="setArrangementType('new')">
+        <button class="landing-choice-btn" data-action="arrangement" data-arrangement-type="new">
           <span class="landing-choice-icon">🆕</span>
           <div class="landing-choice-title">New arrangement</div>
           <div class="landing-choice-desc">First-time classification of a vendor or service not previously assessed under the institution's outsourcing framework. Applies to external and intra-group arrangements.</div>
         </button>
-        <button class="landing-choice-btn reassess" onclick="setArrangementType('reassess')">
+        <button class="landing-choice-btn reassess" data-action="arrangement" data-arrangement-type="reassess">
           <span class="landing-choice-icon">🔄</span>
           <div class="landing-choice-title">Reassessment</div>
           <div class="landing-choice-desc">Periodic review or re-classification of an existing arrangement following a scope change, contract renewal, or material change in risk profile. Applies to external and intra-group arrangements.</div>
@@ -179,8 +179,8 @@ function renderQuestion(container, node) {
       <div class="question-text">${node.question}</div>
       ${node.hint ? `<div class="question-hint">${node.hint}</div>` : ''}
       <div class="answers">
-        ${node.answers.map(a => `
-          <button class="answer-btn ${a.type}" onclick="answer('${a.next}', '${a.label.replace(/'/g, "\\'")}', '${a.action || ''}')">
+        ${node.answers.map((a, i) => `
+          <button class="answer-btn ${a.type}" data-action="answer" data-answer="${i}">
             <div class="answer-icon">${a.type === 'yes' ? 'YES' : a.type === 'no' ? 'NO' : '?'}</div>
             <div>
               <div class="answer-label">${a.label}</div>
@@ -354,8 +354,8 @@ function renderResult(container, result) {
         </div>` : ''}
       <div class="restart-area">
         <div class="btn-group">
-          <button class="btn btn-primary" onclick="restart()">Classify a new service</button>
-          <button class="btn btn-secondary" onclick="goBack()">← Change answer</button>
+          <button class="btn btn-primary" data-action="restart">Classify a new service</button>
+          <button class="btn btn-secondary" data-action="back">← Change answer</button>
         </div>
       </div>
     </div>
@@ -417,5 +417,28 @@ function restart() {
   render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+document.getElementById('backBtn').addEventListener('click', () => goBack());
+
+document.getElementById('treeContainer').addEventListener('click', event => {
+  const button = event.target.closest('button[data-action]');
+  if (!button) return;
+  switch (button.dataset.action) {
+    case 'arrangement':
+      setArrangementType(button.dataset.arrangementType);
+      break;
+    case 'answer': {
+      const a = getNode(currentNode).answers[button.dataset.answer];
+      answer(a.next, a.label, a.action);
+      break;
+    }
+    case 'restart':
+      restart();
+      break;
+    case 'back':
+      goBack();
+      break;
+  }
+});
 
 render();
