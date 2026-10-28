@@ -293,7 +293,7 @@ function renderResult(container, result) {
       </div>
     </div>` : '';
 
-  const ctppHtml = (r.classifications && r.classifications.some(c => c.type === 'dora' && c.value.includes('Art.'))) && window._ctppProvider ? `
+  const ctppHtml = (r.classifications && r.classifications.some(c => c.type === 'dora' && c.value.includes('Art.'))) && _ctppProvider ? `
     <div class="ctpp-flag">
       <div class="ctpp-flag-icon">⚡</div>
       <div class="ctpp-flag-body">
@@ -417,7 +417,7 @@ function answer(nextId, label, action) {
   if (action === 'setNonEuProvider') nonEuProvider = true;
   if (action === 'setMaterialityTrue') materialityChanged = true;
   if (action === 'setMaterialityFalse') materialityChanged = false;
-  if (action === 'setCTPP') window._ctppProvider = true;
+  if (action === 'setCTPP') _ctppProvider = true;
   if (action === 'setSubOutsourcing') _subOutsourcing = true;
   if (action === 'setIntragroup') _isIntragroup = true;
   if (action === 'setCIF') _isCIF = true;
@@ -434,7 +434,7 @@ function goBack() {
     isReassessment = false;
     materialityChanged = true;
     nonEuProvider = false;
-    window._ctppProvider = false;
+    _ctppProvider = false;
     _subOutsourcing = false;
     _isIntragroup = false;
     _isCIF = false;
@@ -448,7 +448,7 @@ function goBack() {
   }
   if (prev.node === 'q_reassessment_materiality_change') materialityChanged = true;
   if (prev.node === 'q_non_eu_provider') nonEuProvider = false;
-  if (prev.node === 'q3e_cloud_ctpp_check' || prev.node === 'q6_ctpp') window._ctppProvider = false;
+  if (prev.node === 'q3e_cloud_ctpp_check' || prev.node === 'q6_ctpp') _ctppProvider = false;
   if (prev.node === 'q6_ctpp_intra' || prev.node === 'q_non_ict_intragroup_sub' || prev.node === 'q_non_ict_non_cif_intragroup_sub' || prev.node === 'q3d_cloud_intra_sub') _subOutsourcing = false;
   if (prev.node === 'q5_intragroup' || prev.node === 'q3b_cloud_ctpp' || prev.node === 'q_non_ict_cif_intragroup' || prev.node === 'q_non_ict_material_non_cif_intragroup' || prev.node === 'q_non_ict_non_material_intragroup' || prev.node === 'q_ict_intragroup_noncif') _isIntragroup = false;
   if (prev.node === 'q_non_ict_cif' || prev.node === 'q4_critical_func' || prev.node === 'q3_cloud_cif') _isCIF = false;
@@ -464,7 +464,7 @@ function restart() {
   isReassessment = false;
   materialityChanged = true;
   nonEuProvider = false;
-  window._ctppProvider = false;
+  _ctppProvider = false;
   _subOutsourcing = false;
   _isIntragroup = false;
   _isCIF = false;
