@@ -15,6 +15,7 @@
   --marisk-color: #818cf8;
   --dora-color: #00d4ff;
   --eba-color: #34d399;
+  --kwg-color: #ffd700;
   --critical: #f87171;
   --warning: #fbbf24;
 }
@@ -121,6 +122,10 @@ h1 span { color: var(--accent); }
   height: 8px;
   border-radius: 50%;
 }
+.legend-dot.marisk { background: var(--marisk-color); }
+.legend-dot.dora { background: var(--dora-color); }
+.legend-dot.eba { background: var(--eba-color); }
+.legend-dot.kwg { background: var(--kwg-color); }
 
 /* PROGRESS BAR */
 .progress-bar {
