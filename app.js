@@ -12,7 +12,6 @@ let isReassessment = false; // true if user selected Reassessment path
 let checkboxCounter = 0;
 
 const LANDING = '__landing__';
-const REASSESS_CHANGE = '__reassess_change__';
 
 function getNode(id) {
   if (id === 'start') return tree;
@@ -37,16 +36,6 @@ function render() {
     document.getElementById('backBtn').style.display = 'none';
     document.querySelector('.progress-bar').style.display = 'none';
     renderLanding(container);
-    return;
-  }
-
-  if (currentNode === REASSESS_CHANGE) {
-    document.getElementById('breadcrumb').style.display = '';
-    document.getElementById('backBtn').style.display = '';
-    document.querySelector('.progress-bar').style.display = '';
-    document.getElementById('progressFill').style.width = '92%';
-    document.getElementById('backBtn').disabled = false;
-    renderReassessChange(container);
     return;
   }
 
@@ -103,52 +92,12 @@ function renderLanding(container) {
   `;
 }
 
-function renderReassessChange(container) {
-  container.innerHTML = `
-    <div class="question-card">
-      <div class="step-label">REASSESSMENT — FINAL STEP</div>
-      <div class="question-text">Has the materiality classification changed compared to the previous assessment?</div>
-      <div class="question-hint">
-        <strong>Materiality change means:</strong> the arrangement was previously classified as non-material (nicht-wesentlich) and is now material (wesentlich), or vice versa.<br><br>
-        <strong>No BaFin notification needed if:</strong> classification stays the same — even if scope, contract terms, or vendor details changed.<br>
-        <strong>BaFin notification required if:</strong> non-material → material, or material → non-material.
-      </div>
-      <div class="answers">
-        <button class="answer-btn yes" onclick="setMaterialityChanged(true)">
-          <div class="answer-icon">YES</div>
-          <div>
-            <div class="answer-label">YES — materiality has changed</div>
-            <div class="answer-sublabel">e.g. non-material → material, or material → non-material</div>
-          </div>
-        </button>
-        <button class="answer-btn no" onclick="setMaterialityChanged(false)">
-          <div class="answer-icon">NO</div>
-          <div>
-            <div class="answer-label">NO — same materiality as before</div>
-            <div class="answer-sublabel">Classification unchanged — only scope or terms updated</div>
-          </div>
-        </button>
-      </div>
-    </div>
-  `;
-}
-
 function setArrangementType(type) {
   arrangementType = type;
   isReassessment = (type === 'reassess');
   materialityChanged = true;
   history = [];
   currentNode = isReassessment ? 'q_reassessment_materiality_change' : 'start';
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function setMaterialityChanged(changed) {
-  materialityChanged = changed;
-  const lastEntry = history[history.length - 1];
-  const resultNode = lastEntry?.nextResult;
-  history.push({ node: REASSESS_CHANGE, answerLabel: changed ? 'Materiality changed' : 'Same materiality' });
-  currentNode = resultNode;
   render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -443,9 +392,6 @@ function goBack() {
     return;
   }
   const prev = history.pop();
-  if (currentNode === REASSESS_CHANGE || prev.nextResult) {
-    materialityChanged = true;
-  }
   if (prev.node === 'q_reassessment_materiality_change') materialityChanged = true;
   if (prev.node === 'q_non_eu_provider') nonEuProvider = false;
   if (prev.node === 'q3e_cloud_ctpp_check' || prev.node === 'q6_ctpp') _ctppProvider = false;
