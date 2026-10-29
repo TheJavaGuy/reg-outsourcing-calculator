@@ -141,7 +141,7 @@ function getBafinHtml(result) {
                   <div class="bafin-step-text"><strong>Reclassification notification</strong> — notify BaFin of the materiality change, the reason, and the updated classification. Include the updated risk assessment. Submit via BaFin reporting portal.</div>
                 </div>
               </div>
-              <div style="margin-top:10px; font-size:12px; color:var(--text-dim);">Legal basis: § 25b KWG / MaRisk AT 9.2</div>
+              <div class="bafin-legal-basis">Legal basis: § 25b KWG / MaRisk AT 9.2</div>
             </div>
           </div>
         </div>`;
@@ -166,7 +166,7 @@ function getBafinHtml(result) {
               <div class="bafin-step-text"><strong>Go-Live notification</strong> — notify BaFin <em>when the arrangement becomes operational</em>. Confirm contract date, actual go-live, and any deviations from the Intention notification.</div>
             </div>
           </div>
-          <div style="margin-top:10px; font-size:12px; color:var(--text-dim);">Legal basis: § 25b KWG / MaRisk AT 9.2</div>
+          <div class="bafin-legal-basis">Legal basis: § 25b KWG / MaRisk AT 9.2</div>
         </div>
       </div>
     </div>`;
@@ -250,7 +250,7 @@ function renderResult(container, result) {
         <div class="ctpp-flag-text">
           This provider is designated or potential <strong>Critical Third-Party Provider (CTPP)</strong> under DORA Art. 31-44.
           Additional obligations apply:
-          <ul style="margin-top:8px;padding-left:16px;display:flex;flex-direction:column;gap:4px;">
+          <ul class="ctpp-flag-list">
             <li>ESA Lead Overseer oversight applies — monitor recommendations and binding measures</li>
             <li>Concentration risk must account for sector-wide dependency across EU financial sector</li>
             <li>Exit plan must identify genuinely alternative providers outside the CTPP group</li>
@@ -274,7 +274,7 @@ function renderResult(container, result) {
       <div class="ctpp-flag-body">
         <div class="ctpp-flag-title">SUB-OUTSOURCING — Additional Requirements Apply</div>
         <div class="ctpp-flag-text">
-          <ul style="margin-top:8px;padding-left:16px;display:flex;flex-direction:column;gap:4px;">
+          <ul class="ctpp-flag-list">
             <li>Full sub-outsourcing chain must be mapped and documented</li>
             <li>External sub-vendor must be formally approved before engagement</li>
             <li>Sub-outsourcing clause required in the primary contract</li>
@@ -326,7 +326,7 @@ function renderResult(container, result) {
   container.innerHTML = `
     <div class="result-card">
       <div class="result-title">✓ Classification determined</div>
-      <h2 style="font-size:20px;font-weight:700;color:#fff;margin-bottom:20px;">${r.title}</h2>
+      <h2 class="result-heading">${r.title}</h2>
       ${alertHtml}
       ${nonEuHtml}
       ${ctppHtml}

@@ -305,6 +305,13 @@ h1 span { color: var(--accent); }
   margin-bottom: 20px;
 }
 
+.result-heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
 .classification-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -609,6 +616,13 @@ h1 span { color: var(--accent); }
 }
 .ctpp-flag-text { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
 .ctpp-flag-text strong { color: var(--accent2); }
+.ctpp-flag-list {
+  margin-top: 8px;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
 /* NON-EU PROVIDER FLAG */
 .non-eu-flag {
@@ -655,6 +669,7 @@ h1 span { color: var(--accent); }
 }
 .bafin-flag-text { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
 .bafin-flag-text strong { color: #c7d2fe; }
+.bafin-legal-basis { margin-top: 10px; font-size: 12px; color: var(--text-dim); }
 
 /* LANDING SCREEN */
 .landing-screen {
