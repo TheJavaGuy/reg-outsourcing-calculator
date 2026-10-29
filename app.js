@@ -385,17 +385,7 @@ function answer(nextId, label, action) {
 
 function goBack() {
   if (history.length === 0) {
-    currentNode = LANDING;
-    arrangementType = null;
-    isReassessment = false;
-    materialityChanged = true;
-    nonEuProvider = false;
-    _ctppProvider = false;
-    _subOutsourcing = false;
-    _isIntragroup = false;
-    _isCIF = false;
-    render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    restart();
     return;
   }
   const prev = history.pop();
