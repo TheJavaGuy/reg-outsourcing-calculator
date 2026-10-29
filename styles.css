@@ -471,7 +471,6 @@ h1 span { color: var(--accent); }
   transition: color 0.2s;
 }
 .back-btn:hover { color: var(--text-mid); }
-.back-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* ALERT */
 .alert {

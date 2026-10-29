@@ -55,8 +55,6 @@ function render() {
     return `<span class="breadcrumb-item ${isLast ? 'active' : ''}">${item}</span>${!isLast ? '<span class="breadcrumb-sep">›</span>' : ''}`;
   }).join('');
 
-  document.getElementById('backBtn').disabled = history.length === 0;
-
   if (isResult(currentNode)) {
     renderResult(container, getResult(currentNode));
   } else {
