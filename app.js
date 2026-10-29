@@ -26,6 +26,15 @@ function isResult(id) {
   return id && id.startsWith('result_');
 }
 
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function render() {
   const container = document.getElementById('treeContainer');
 
@@ -52,7 +61,7 @@ function render() {
   history.forEach(h => { if (h.answerLabel) items.push(h.answerLabel); });
   bc.innerHTML = items.map((item, i) => {
     const isLast = i === items.length - 1;
-    return `<span class="breadcrumb-item ${isLast ? 'active' : ''}">${item}</span>${!isLast ? '<span class="breadcrumb-sep">›</span>' : ''}`;
+    return `<span class="breadcrumb-item ${isLast ? 'active' : ''}">${escapeHtml(item)}</span>${!isLast ? '<span class="breadcrumb-sep">›</span>' : ''}`;
   }).join('');
 
   if (isResult(currentNode)) {
@@ -181,8 +190,8 @@ function renderQuestion(container, node) {
           <button class="answer-btn ${a.type}" data-action="answer" data-answer="${i}">
             <div class="answer-icon">${a.type === 'yes' ? 'YES' : a.type === 'no' ? 'NO' : '?'}</div>
             <div>
-              <div class="answer-label">${a.label}</div>
-              ${a.sublabel ? `<div class="answer-sublabel">${a.sublabel}</div>` : ''}
+              <div class="answer-label">${escapeHtml(a.label)}</div>
+              ${a.sublabel ? `<div class="answer-sublabel">${escapeHtml(a.sublabel)}</div>` : ''}
             </div>
           </button>
         `).join('')}
