@@ -35,11 +35,32 @@ function escapeHtml(text) {
     .replace(/'/g, '&#39;');
 }
 
+// Lucide icon paths (lucide.dev), drawn inline at 16px with a 1.5 stroke
+const ICONS = {
+  filePlus: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M9 15h6"/><path d="M12 18v-6"/>',
+  refresh: '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>',
+  landmark: '<path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M12 2 20 7H4z"/>',
+  zap: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
+  link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+  alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  arrowLeft: '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>'
+};
+
+function icon(name) {
+  return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+}
+
+function frameworkDots(...types) {
+  return types.map(t => `<span class="legend-dot ${t}"></span>`).join('');
+}
+
 function render() {
   const container = document.getElementById('treeContainer');
 
   if (!currentNode || currentNode === LANDING) {
-    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('progressFill').style.transform = 'scaleX(0)';
     document.getElementById('breadcrumb').innerHTML = '';
     document.getElementById('breadcrumb').style.display = 'none';
     document.getElementById('backBtn').style.display = 'none';
@@ -54,7 +75,7 @@ function render() {
 
   const totalSteps = 9;
   const progress = Math.min((history.length / totalSteps) * 100, 90);
-  document.getElementById('progressFill').style.width = progress + '%';
+  document.getElementById('progressFill').style.transform = `scaleX(${progress / 100})`;
 
   const bc = document.getElementById('breadcrumb');
   const items = [arrangementType === 'reassess' ? 'Reassessment' : 'New arrangement'];
@@ -85,12 +106,12 @@ function renderLanding(container) {
       <div class="landing-question-label">What type of classification is this?</div>
       <div class="landing-choice-grid">
         <button class="landing-choice-btn" data-action="arrangement" data-arrangement-type="new">
-          <span class="landing-choice-icon">🆕</span>
+          <span class="landing-choice-icon">${icon('filePlus')}</span>
           <div class="landing-choice-title">New arrangement</div>
           <div class="landing-choice-desc">First-time classification of a vendor or service not previously assessed under the institution's outsourcing framework. Applies to external and intra-group arrangements.</div>
         </button>
         <button class="landing-choice-btn reassess" data-action="arrangement" data-arrangement-type="reassess">
-          <span class="landing-choice-icon">🔄</span>
+          <span class="landing-choice-icon">${icon('refresh')}</span>
           <div class="landing-choice-title">Reassessment</div>
           <div class="landing-choice-desc">Periodic review or re-classification of an existing arrangement following a scope change, contract renewal, or material change in risk profile. Applies to external and intra-group arrangements.</div>
         </button>
@@ -113,9 +134,9 @@ function getBafinHtml(result) {
   if (!result.bafin_required) {
     return `
       <div class="bafin-flag">
-        <div class="bafin-flag-icon">🏛</div>
+        <div class="bafin-flag-icon">${icon('landmark')}</div>
         <div class="bafin-flag-body">
-          <div class="bafin-flag-title">BaFin Notification</div>
+          <div class="bafin-flag-title">${frameworkDots('kwg')}BaFin notification</div>
           <div class="bafin-flag-text">${result.bafin}</div>
         </div>
       </div>`;
@@ -125,9 +146,9 @@ function getBafinHtml(result) {
     if (!materialityChanged) {
       return `
         <div class="bafin-flag">
-          <div class="bafin-flag-icon">🏛</div>
+          <div class="bafin-flag-icon">${icon('landmark')}</div>
           <div class="bafin-flag-body">
-            <div class="bafin-flag-title">BaFin Notification — Reassessment</div>
+            <div class="bafin-flag-title">${frameworkDots('kwg')}BaFin notification — reassessment</div>
             <div class="bafin-flag-text">
               <strong>No BaFin notification required.</strong> The materiality classification has not changed.
               Document the reassessment outcome in your internal outsourcing register and update the Register of Information if any details changed.
@@ -137,9 +158,9 @@ function getBafinHtml(result) {
     } else {
       return `
         <div class="bafin-flag">
-          <div class="bafin-flag-icon">🏛</div>
+          <div class="bafin-flag-icon">${icon('landmark')}</div>
           <div class="bafin-flag-body">
-            <div class="bafin-flag-title">BaFin Notification — Materiality Change</div>
+            <div class="bafin-flag-title">${frameworkDots('kwg')}BaFin notification — materiality change</div>
             <div class="bafin-flag-text">
               <strong>Notification required — materiality has changed.</strong>
               <div class="bafin-steps">
@@ -158,19 +179,19 @@ function getBafinHtml(result) {
   // New arrangement — 2 notifications
   return `
     <div class="bafin-flag">
-      <div class="bafin-flag-icon">🏛</div>
+      <div class="bafin-flag-icon">${icon('landmark')}</div>
       <div class="bafin-flag-body">
-        <div class="bafin-flag-title">BaFin Notification — New Material Arrangement</div>
+        <div class="bafin-flag-title">${frameworkDots('kwg')}BaFin notification — new material arrangement</div>
         <div class="bafin-flag-text">
           <strong>Two notifications required.</strong> Submit via BaFin reporting portal. Outsourcing Officer sign-off required before each submission.
           <div class="bafin-steps">
             <div class="bafin-step">
               <div class="bafin-step-num">1</div>
-              <div class="bafin-step-text"><strong>Intention to Outsource</strong> — notify BaFin <em>before contract signing</em>. Include vendor name, service description, materiality rationale, and planned go-live date.</div>
+              <div class="bafin-step-text"><strong>Intention to Outsource</strong> — notify BaFin before contract signing. Include vendor name, service description, materiality rationale, and planned go-live date.</div>
             </div>
             <div class="bafin-step">
               <div class="bafin-step-num">2</div>
-              <div class="bafin-step-text"><strong>Go-Live notification</strong> — notify BaFin <em>when the arrangement becomes operational</em>. Confirm contract date, actual go-live, and any deviations from the Intention notification.</div>
+              <div class="bafin-step-text"><strong>Go-Live notification</strong> — notify BaFin when the arrangement becomes operational. Confirm contract date, actual go-live, and any deviations from the Intention notification.</div>
             </div>
           </div>
           <div class="bafin-legal-basis">Legal basis: § 25b KWG / MaRisk AT 9.2</div>
@@ -188,7 +209,7 @@ function renderQuestion(container, node) {
       <div class="answers">
         ${node.answers.map((a, i) => `
           <button class="answer-btn ${a.type}" data-action="answer" data-answer="${i}">
-            <div class="answer-icon">${a.type === 'yes' ? 'YES' : a.type === 'no' ? 'NO' : '?'}</div>
+            <div class="answer-icon">${a.type === 'yes' ? 'Yes' : a.type === 'no' ? 'No' : '?'}</div>
             <div>
               <div class="answer-label">${escapeHtml(a.label)}</div>
               ${a.sublabel ? `<div class="answer-sublabel">${escapeHtml(a.sublabel)}</div>` : ''}
@@ -236,24 +257,24 @@ function renderResult(container, result) {
 
   const alertHtml = r.alert ? `
     <div class="alert alert-${r.alert.type}">
-      <div class="alert-icon">${r.alert.type === 'critical' ? '⚠' : '!'}</div>
+      <div class="alert-icon">${icon(r.alert.type === 'critical' ? 'alert' : 'info')}</div>
       <div>${r.alert.text}</div>
     </div>` : '';
 
   const nonEuHtml = nonEuProvider ? `
     <div class="non-eu-flag">
-      <div class="non-eu-flag-icon">🌐</div>
+      <div class="non-eu-flag-icon">${icon('globe')}</div>
       <div class="non-eu-flag-body">
-        <div class="non-eu-flag-title">NON-EU PROVIDER — Additional Requirements</div>
+        <div class="non-eu-flag-title">${frameworkDots('dora')}Non-EU provider — additional requirements</div>
         <div class="non-eu-flag-text">The provider is located outside the EU. <strong>DORA Art. 28(4)(g)</strong> requires the contract to address: data location and applicable data protection law, governing law and jurisdiction, enforceability of audit rights across borders, and the ability of competent authorities to effectively supervise the arrangement. Verify that BaFin and relevant EU regulators can exercise their supervisory rights under the contract.</div>
       </div>
     </div>` : '';
 
   const ctppHtml = (r.classifications && r.classifications.some(c => c.type === 'dora' && c.value.includes('Art.'))) && _ctppProvider ? `
     <div class="ctpp-flag">
-      <div class="ctpp-flag-icon">⚡</div>
+      <div class="ctpp-flag-icon">${icon('zap')}</div>
       <div class="ctpp-flag-body">
-        <div class="ctpp-flag-title">CTPP — Additional Requirements Apply</div>
+        <div class="ctpp-flag-title">${frameworkDots('dora')}CTPP — additional requirements apply</div>
         <div class="ctpp-flag-text">
           This provider is designated or potential <strong>Critical Third-Party Provider (CTPP)</strong> under DORA Art. 31-44.
           Additional obligations apply:
@@ -268,18 +289,18 @@ function renderResult(container, result) {
       </div>
     </div>` : r.ctpp ? `
     <div class="ctpp-flag">
-      <div class="ctpp-flag-icon">⚡</div>
+      <div class="ctpp-flag-icon">${icon('zap')}</div>
       <div class="ctpp-flag-body">
-        <div class="ctpp-flag-title">CTPP — Concentration Risk Check Required</div>
+        <div class="ctpp-flag-title">${frameworkDots('dora')}CTPP — concentration risk check required</div>
         <div class="ctpp-flag-text">${r.ctpp}</div>
       </div>
     </div>` : '';
 
   const subOutsourcingHtml = (_subOutsourcing && r.bafin_required) ? `
     <div class="ctpp-flag">
-      <div class="ctpp-flag-icon">⛓</div>
+      <div class="ctpp-flag-icon">${icon('link')}</div>
       <div class="ctpp-flag-body">
-        <div class="ctpp-flag-title">SUB-OUTSOURCING — Additional Requirements Apply</div>
+        <div class="ctpp-flag-title">${frameworkDots('marisk', 'dora')}Sub-outsourcing — additional requirements apply</div>
         <div class="ctpp-flag-text">
           <ul class="ctpp-flag-list">
             <li>Full sub-outsourcing chain must be mapped and documented</li>
@@ -312,7 +333,7 @@ function renderResult(container, result) {
     { text: 'No BaFin notification required — confirmed and documented in writing', tag: 'risk' }
   ];
   const activeChecklist = (isReassessment && materialityChanged === false) ? reassessmentChecklist : r.checklist;
-  const checklistTitle = (isReassessment && materialityChanged === false) ? 'REASSESSMENT CHECKLIST' : 'What to prepare before contracting';
+  const checklistTitle = (isReassessment && materialityChanged === false) ? 'Reassessment checklist' : 'What to prepare before contracting';
 
   const checklistHtml = activeChecklist ? `
     <div class="checklist-section">
@@ -332,7 +353,7 @@ function renderResult(container, result) {
 
   container.innerHTML = `
     <div class="result-card">
-      <div class="result-title">✓ Classification determined</div>
+      <div class="result-title">Classification</div>
       <h2 class="result-heading">${r.title}</h2>
       ${alertHtml}
       ${nonEuHtml}
@@ -342,7 +363,7 @@ function renderResult(container, result) {
       <div class="classification-grid">
         ${r.classifications.map(c => `
           <div class="class-badge ${c.type}">
-            <div class="class-badge-label">${c.label}</div>
+            <div class="class-badge-label">${frameworkDots(c.type)}${c.label}</div>
             <div class="class-badge-value">${c.value}</div>
           </div>
         `).join('')}
@@ -362,7 +383,7 @@ function renderResult(container, result) {
       <div class="restart-area">
         <div class="btn-group">
           <button class="btn btn-primary" data-action="restart">Classify a new service</button>
-          <button class="btn btn-secondary" data-action="back">← Change answer</button>
+          <button class="btn btn-secondary" data-action="back">${icon('arrowLeft')}Change answer</button>
         </div>
       </div>
     </div>

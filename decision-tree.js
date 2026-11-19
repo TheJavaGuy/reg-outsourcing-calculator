@@ -1,16 +1,16 @@
 const tree = {
   id: 'start',
-  step: 'STEP 1 / 7',
+  step: 'Step 1 of 7',
   question: 'Does this arrangement involve ICT services — software, cloud, data centres, networks, or IT-based processing?',
   hint: 'YES: SaaS, cloud hosting, data centres, IT security, payment processing, core banking systems.<br>NO: physical security, cleaning, consulting without system access, facility management.',
   answers: [
     {
-      label: 'YES — ICT service',
+      label: 'ICT service',
       type: 'yes',
       next: 'q2_ict'
     },
     {
-      label: 'NO — Not ICT',
+      label: 'Not ICT',
       type: 'no',
       next: 'q_non_ict'
     }
@@ -19,292 +19,292 @@ const tree = {
 
 const nodes = {
   'q_reassessment_materiality_change': {
-    step: 'REASSESSMENT — STEP 1',
+    step: 'Reassessment · step 1',
     question: 'Has the materiality of this arrangement changed since the last assessment?',
     hint: '<strong>YES:</strong> scope expanded significantly, new functions added, dependency increased, provider became CTPP.<br><strong>NO:</strong> arrangement unchanged, same scope, same provider, same risk profile.',
     answers: [
-      { label: 'YES — materiality or scope has changed', type: 'yes', next: 'start', action: 'setMaterialityTrue' },
-      { label: 'NO — same classification as before', type: 'no', next: 'start', action: 'setMaterialityFalse' }
+      { label: 'Materiality or scope has changed', type: 'yes', next: 'start', action: 'setMaterialityTrue' },
+      { label: 'Same classification as before', type: 'no', next: 'start', action: 'setMaterialityFalse' }
     ]
   },
 
   'q2_ict': {
-    step: 'STEP 2 / 8',
+    step: 'Step 2 of 8',
     question: 'Is this service cloud-based (hosted by a third-party cloud provider)?',
     hint: 'YES: public cloud (AWS, Azure, GCP), SaaS on third-party infrastructure, hybrid with external components.<br>NO: on-premise servers, institution-owned data centres.',
     answers: [
-      { label: 'YES — cloud-based service', type: 'yes', next: 'q3_cloud_cif' },
-      { label: 'NO — not cloud (on-premise or institution-owned)', type: 'no', next: 'q2b_ict' }
+      { label: 'Cloud-based service', type: 'yes', next: 'q3_cloud_cif' },
+      { label: 'Not cloud (on-premise or institution-owned)', type: 'no', next: 'q2b_ict' }
     ]
   },
 
   'q2b_ict': {
-    step: 'STEP 3 / 8',
+    step: 'Step 3 of 8',
     question: 'Is this an activity the institution would normally perform itself, or would otherwise have to perform?',
     hint: 'YES: core banking, risk systems, AML, payments, IT development, helpdesk.<br>NO: electricity, telecom infrastructure, commodity software licences.',
     answers: [
-      { label: 'YES — the institution would do this itself', type: 'yes', next: 'q3_material' },
-      { label: 'NO — the institution would not do this itself', type: 'no', next: 'q_professional_services_check' }
+      { label: 'The institution would do this itself', type: 'yes', next: 'q3_material' },
+      { label: 'The institution would not do this itself', type: 'no', next: 'q_professional_services_check' }
     ]
   },
 
   'q3_cloud_cif': {
-    step: 'STEP 3 / 8',
+    step: 'Step 3 of 8',
     question: 'Does this cloud service support a critical or important function of the institution (CIF)?',
     hint: 'YES: core banking, payment processing, AML/KYC, fraud detection, risk management, regulatory reporting, trading platforms, customer-facing digital channels, identity and authentication systems, credit decisioning.<br>NO: internal HR tools, payroll, non-critical analytics, internal communication platforms, facility management systems.',
     answers: [
-      { label: 'YES — supports a CIF', type: 'yes', next: 'q3b_cloud_ctpp', action: 'setCIF' },
-      { label: 'NO — does not support a CIF', type: 'no', next: 'q_cloud_noncif_material' }
+      { label: 'Supports a CIF', type: 'yes', next: 'q3b_cloud_ctpp', action: 'setCIF' },
+      { label: 'Does not support a CIF', type: 'no', next: 'q_cloud_noncif_material' }
     ]
   },
 
   'q3b_cloud_ctpp': {
-    step: 'STEP 4 / 8',
+    step: 'Step 4 of 8',
     question: 'Is the provider within the same group (intra-group)?',
     hint: '<strong>Intra-group:</strong> provider belongs to the same group/holding. Full MaRisk/DORA requirements still apply — contract, SLA, audit rights, exit plan required.',
     answers: [
-      { label: 'YES — intra-group cloud provider', type: 'yes', next: 'q3d_cloud_intra_sub', action: 'setIntragroup' },
-      { label: 'NO — external cloud provider', type: 'no', next: 'q3e_cloud_ctpp_check' }
+      { label: 'Intra-group cloud provider', type: 'yes', next: 'q3d_cloud_intra_sub', action: 'setIntragroup' },
+      { label: 'External cloud provider', type: 'no', next: 'q3e_cloud_ctpp_check' }
     ]
   },
 
   'q3d_cloud_intra_sub': {
-    step: 'STEP 5 / 8',
+    step: 'Step 5 of 8',
     question: 'Does the intra-group cloud provider use external sub-vendors for the critical function?',
     hint: 'YES: group IT entity running on AWS/Azure.<br>NO: all infrastructure owned and operated within the group.',
     answers: [
-      { label: 'YES — sub-outsourcing to external cloud/vendor', type: 'yes', next: 'result_ig2', action: 'setSubOutsourcing' },
-      { label: 'NO — pure intra-group cloud', type: 'no', next: 'result_ig2' }
+      { label: 'Sub-outsourcing to external cloud/vendor', type: 'yes', next: 'result_ig2', action: 'setSubOutsourcing' },
+      { label: 'Pure intra-group cloud', type: 'no', next: 'result_ig2' }
     ]
   },
 
   'q3e_cloud_ctpp_check': {
-    step: 'STEP 5 / 8',
+    step: 'Step 5 of 8',
     question: 'Is this a major hyperscaler or potential CTPP (Critical Third-Party Provider)?',
     hint: 'YES: AWS, Microsoft Azure, Google Cloud, Oracle Cloud, IBM Cloud, Salesforce.<br>NO: specialised regional or sector-specific cloud vendors.',
     answers: [
-      { label: 'YES / POSSIBLY — major cloud or mega provider', type: 'yes', next: 'result_class4', action: 'setCTPP' },
-      { label: 'NO — specialised cloud vendor', type: 'no', next: 'result_class4' }
+      { label: 'Major cloud or mega provider, confirmed or possible', type: 'yes', next: 'result_class4', action: 'setCTPP' },
+      { label: 'Specialised cloud vendor', type: 'no', next: 'result_class4' }
     ]
   },
 
   'q_cloud_noncif_material': {
-    step: 'STEP 4 / 8',
+    step: 'Step 4 of 8',
     question: 'Could an outage or failure of this service materially impact the institution\'s operations or reputation?',
     hint: 'YES: institution depends on it, hard to replace quickly, significant business impact. NO: easily replaceable, limited business impact, low dependency.',
     answers: [
-      { label: 'YES — material impact possible', type: 'yes', next: 'q3c_cloud_noncif' },
-      { label: 'NO — limited impact, low dependency', type: 'no', next: 'q_cloud_noncif_nonmaterial_data' }
+      { label: 'Material impact possible', type: 'yes', next: 'q3c_cloud_noncif' },
+      { label: 'Limited impact, low dependency', type: 'no', next: 'q_cloud_noncif_nonmaterial_data' }
     ]
   },
 
   'q_cloud_noncif_nonmaterial_data': {
-    step: 'STEP 5 / 8',
+    step: 'Step 5 of 8',
     question: 'Does the service have access to customer data, employee data, or the institution\'s production systems?',
     hint: 'YES: vendor portal with customer data, SaaS tool processing employee records, read access to production systems. NO: standalone tool, no data access, no system integration.',
     answers: [
-      { label: 'YES — data or system access exists', type: 'yes', next: 'result_class3' },
-      { label: 'NO — no data access or system integration', type: 'no', next: 'result_class3' }
+      { label: 'Data or system access exists', type: 'yes', next: 'result_class3' },
+      { label: 'No data access or system integration', type: 'no', next: 'result_class3' }
     ]
   },
 
   'q3c_cloud_noncif': {
-    step: 'STEP 4 / 8',
+    step: 'Step 4 of 8',
     question: 'Does the cloud service have access to customer data or production systems?',
     hint: 'YES: customer records, transaction data, production databases.<br>NO: anonymised analytics, internal test data.',
     answers: [
-      { label: 'YES — access to customer/production data', type: 'yes', next: 'result_class5' },
-      { label: 'NO — internal/non-sensitive data only', type: 'no', next: 'result_class5' }
+      { label: 'Access to customer/production data', type: 'yes', next: 'result_class5' },
+      { label: 'Internal/non-sensitive data only', type: 'no', next: 'result_class5' }
     ]
   },
 
   'q3_material': {
-    step: 'STEP 4 / 8',
+    step: 'Step 4 of 8',
     question: 'Could an outage or poor quality of this service materially harm the institution?',
     hint: 'YES: disruption to client services, regulatory breach risk, financial loss, reputational damage.<br>NO: internal tool, easily replaced, no client or regulatory impact.',
     answers: [
-      { label: 'YES — material impact', type: 'yes', next: 'q4_critical_func' },
-      { label: 'NO — limited impact', type: 'no', next: 'q_non_material' }
+      { label: 'Material impact', type: 'yes', next: 'q4_critical_func' },
+      { label: 'Limited impact', type: 'no', next: 'q_non_material' }
     ]
   },
 
   'q4_critical_func': {
-    step: 'STEP 4 / 7',
+    step: 'Step 4 of 7',
     question: 'Does the service support a critical or important function of the institution (CIF)?',
     hint: 'YES: core banking, payment processing, AML/KYC, fraud detection, risk management, regulatory reporting, trading platforms, customer-facing digital channels, identity and authentication systems, credit decisioning.<br>NO: internal HR tools, payroll, non-critical analytics, internal communication platforms, facility management systems.',
     answers: [
-      { label: 'YES — supports a CIF', type: 'yes', next: 'q5_intragroup', action: 'setCIF' },
-      { label: 'NO — does not support a CIF', type: 'no', next: 'q_ict_only_material' }
+      { label: 'Supports a CIF', type: 'yes', next: 'q5_intragroup', action: 'setCIF' },
+      { label: 'Does not support a CIF', type: 'no', next: 'q_ict_only_material' }
     ]
   },
 
   'q5_intragroup': {
-    step: 'STEP 5 / 7',
+    step: 'Step 5 of 7',
     question: 'Is the provider within the same group (intra-group)?',
     hint: '<strong>Intra-group:</strong> provider belongs to the same group/holding. Full MaRisk/DORA requirements still apply — contract, SLA, audit rights, exit plan required.',
     answers: [
-      { label: 'YES — intra-group provider', type: 'yes', next: 'q6_ctpp_intra', action: 'setIntragroup' },
-      { label: 'NO — external provider', type: 'no', next: 'q_non_eu_provider' }
+      { label: 'Intra-group provider', type: 'yes', next: 'q6_ctpp_intra', action: 'setIntragroup' },
+      { label: 'External provider', type: 'no', next: 'q_non_eu_provider' }
     ]
   },
 
   'q_non_eu_provider': {
-    step: 'STEP 6 / 8',
+    step: 'Step 6 of 8',
     question: 'Is the provider located outside the EU?',
     hint: 'YES: provider headquartered or operating outside the EU/EEA.<br>NO: provider located within the EU/EEA.',
     answers: [
-      { label: 'YES — provider is outside the EU', type: 'yes', action: 'setNonEuProvider', next: 'q6_ctpp' },
-      { label: 'NO — provider is within the EU', type: 'no', next: 'q6_ctpp' }
+      { label: 'Provider is outside the EU', type: 'yes', action: 'setNonEuProvider', next: 'q6_ctpp' },
+      { label: 'Provider is within the EU', type: 'no', next: 'q6_ctpp' }
     ]
   },
 
   'q6_ctpp': {
-    step: 'STEP 6 / 7',
+    step: 'Step 6 of 7',
     question: 'Is the provider a potential CTPP (Critical Third-Party Provider)?',
     hint: 'YES: AWS, Microsoft Azure, Google Cloud, Oracle Cloud, IBM, Accenture.<br>NO: specialised providers not serving a systemic share of EU financial institutions.',
     answers: [
-      { label: 'YES / POSSIBLY — major cloud or mega provider', type: 'yes', next: 'result_class4', action: 'setCTPP' },
-      { label: 'NO — standard external vendor', type: 'no', next: 'result_class4' }
+      { label: 'Major cloud or mega provider, confirmed or possible', type: 'yes', next: 'result_class4', action: 'setCTPP' },
+      { label: 'Standard external vendor', type: 'no', next: 'result_class4' }
     ]
   },
 
   'q6_ctpp_intra': {
-    step: 'STEP 6 / 7',
+    step: 'Step 6 of 7',
     question: 'Does the intra-group provider use external sub-vendors for the critical function?',
     hint: 'YES: intra-group entity subcontracts to an external vendor.<br>NO: all delivery stays within the group with no external dependencies.',
     answers: [
-      { label: 'YES — sub-outsourcing to an external vendor exists', type: 'yes', next: 'result_ig2', action: 'setSubOutsourcing' },
-      { label: 'NO — everything stays within the group', type: 'no', next: 'result_ig2' }
+      { label: 'Sub-outsourcing to an external vendor exists', type: 'yes', next: 'result_ig2', action: 'setSubOutsourcing' },
+      { label: 'Everything stays within the group', type: 'no', next: 'result_ig2' }
     ]
   },
 
   'q_ict_only_material': {
-    step: 'STEP 5 / 7',
+    step: 'Step 5 of 7',
     question: 'Is this ICT service also outsourcing — would the institution normally perform this activity itself?',
     hint: 'YES: core banking, risk systems, payment processing — institution would do this itself.<br>NO: commodity software licence, infrastructure service, network provider — institution would not do this itself.',
     answers: [
-      { label: 'YES — institution would do this itself', type: 'yes', next: 'q_ict_intragroup_noncif' },
-      { label: 'NO — pure ICT service only', type: 'no', next: 'result_class3' }
+      { label: 'Institution would do this itself', type: 'yes', next: 'q_ict_intragroup_noncif' },
+      { label: 'Pure ICT service only', type: 'no', next: 'result_class3' }
     ]
   },
 
   'q_ict_intragroup_noncif': {
-    step: 'STEP 6 / 7',
+    step: 'Step 6 of 7',
     question: 'Is the ICT provider within the same group (intra-group)?',
     hint: 'YES: provider belongs to the same group/holding.<br>NO: external provider.',
     answers: [
-      { label: 'YES — intra-group provider', type: 'yes', next: 'result_ig3', action: 'setIntragroup' },
-      { label: 'NO — external provider', type: 'no', next: 'result_class5' }
+      { label: 'Intra-group provider', type: 'yes', next: 'result_ig3', action: 'setIntragroup' },
+      { label: 'External provider', type: 'no', next: 'result_class5' }
     ]
   },
 
   'q_non_ict': {
-    step: 'STEP 2 / 4',
+    step: 'Step 2 of 4',
     question: 'Is this an activity the institution would normally perform itself, or would otherwise have to perform?',
     hint: 'YES: credit analysts, compliance, internal audit, back-office processing, call centre.<br>NO: cleaning, physical security, catering, transport.',
     answers: [
-      { label: 'YES — the institution would do this itself', type: 'yes', next: 'q_non_ict_material' },
-      { label: 'NO — the institution would not do this', type: 'no', next: 'q_professional_services_check' }
+      { label: 'The institution would do this itself', type: 'yes', next: 'q_non_ict_material' },
+      { label: 'The institution would not do this', type: 'no', next: 'q_professional_services_check' }
     ]
   },
 
   'q_professional_services_check': {
-    step: 'STEP 3 / 5',
+    step: 'Step 3 of 5',
     question: 'Does the service involve access to the institution\'s systems, customer data, or delivery of a regulated function?',
     hint: 'YES: consultancy with system access, marketing agency with CRM access, hiring platform with employee data, interim compliance officer, outsourced internal audit.<br>NO: cleaning, catering, travel management, office supplies, pure strategy consultancy without system access.',
     answers: [
-      { label: 'YES — system/data access or regulated function', type: 'yes', next: 'q_professional_services_regulated' },
-      { label: 'NO — no access, no regulated function', type: 'no', next: 'result_external_procurement' }
+      { label: 'System/data access or regulated function', type: 'yes', next: 'q_professional_services_regulated' },
+      { label: 'No access, no regulated function', type: 'no', next: 'result_external_procurement' }
     ]
   },
 
   'q_professional_services_regulated': {
-    step: 'STEP 4 / 5',
+    step: 'Step 4 of 5',
     question: 'Does the service deliver or substitute a regulated function of the institution?',
     hint: 'YES: interim compliance officer, outsourced internal audit, outsourced risk management, outsourced AML function.<br>NO: marketing agency with CRM access, recruitment platform, travel tool with employee data, IT consultancy with read-only system access.',
     answers: [
-      { label: 'YES — delivers a regulated function', type: 'yes', next: 'q_non_ict_material' },
-      { label: 'NO — system access only, no regulated function', type: 'no', next: 'result_external_procurement_data' }
+      { label: 'Delivers a regulated function', type: 'yes', next: 'q_non_ict_material' },
+      { label: 'System access only, no regulated function', type: 'no', next: 'result_external_procurement_data' }
     ]
   },
 
   'q_non_ict_material': {
-    step: 'STEP 3 / 4',
+    step: 'Step 3 of 4',
     question: 'Could an outage materially harm the institution?',
     hint: 'YES: service failure would disrupt client services, trigger regulatory breach, or cause financial loss.<br>NO: service can be replaced quickly with no material client or regulatory impact.',
     answers: [
-      { label: 'YES — material impact', type: 'yes', next: 'q_non_ict_cif' },
-      { label: 'NO — limited impact', type: 'no', next: 'q_non_ict_non_material_intragroup' }
+      { label: 'Material impact', type: 'yes', next: 'q_non_ict_cif' },
+      { label: 'Limited impact', type: 'no', next: 'q_non_ict_non_material_intragroup' }
     ]
   },
 
   'q_non_ict_cif': {
-    step: 'STEP 4 / 6',
+    step: 'Step 4 of 6',
     question: 'Does the service support a critical or important function of the institution?',
     hint: 'YES: core banking, payment processing, AML/KYC, fraud detection, risk management, regulatory reporting, trading platforms, customer-facing digital channels, identity and authentication systems, credit decisioning.<br>NO: internal HR tools, payroll, non-critical analytics, internal communication platforms, facility management systems.',
     answers: [
-      { label: 'YES — supports a critical or important function', type: 'yes', next: 'q_non_ict_cif_intragroup', action: 'setCIF' },
-      { label: 'NO — does not support a CIF', type: 'no', next: 'q_non_ict_material_non_cif_intragroup' }
+      { label: 'Supports a critical or important function', type: 'yes', next: 'q_non_ict_cif_intragroup', action: 'setCIF' },
+      { label: 'Does not support a CIF', type: 'no', next: 'q_non_ict_material_non_cif_intragroup' }
     ]
   },
 
   'q_non_ict_cif_intragroup': {
-    step: 'STEP 5 / 6',
+    step: 'Step 5 of 6',
     question: 'Is the provider within the same group (intra-group)?',
     hint: '<strong>Intra-group:</strong> provider belongs to the same group/holding. Full MaRisk AT 9 and EBA GL obligations still apply.',
     answers: [
-      { label: 'YES — intra-group provider', type: 'yes', next: 'q_non_ict_intragroup_sub', action: 'setIntragroup' },
-      { label: 'NO — external provider', type: 'no', next: 'result_class1' }
+      { label: 'Intra-group provider', type: 'yes', next: 'q_non_ict_intragroup_sub', action: 'setIntragroup' },
+      { label: 'External provider', type: 'no', next: 'result_class1' }
     ]
   },
 
   'q_non_ict_intragroup_sub': {
-    step: 'STEP 6 / 6',
+    step: 'Step 6 of 6',
     question: 'Does the intra-group provider use external sub-vendors for this function?',
     hint: 'YES: intra-group entity sub-contracts to an external firm.<br>NO: all delivery remains within the group.',
     answers: [
-      { label: 'YES — sub-outsourcing to an external vendor exists', type: 'yes', next: 'result_ig1', action: 'setSubOutsourcing' },
-      { label: 'NO — everything stays within the group', type: 'no', next: 'result_ig1' }
+      { label: 'Sub-outsourcing to an external vendor exists', type: 'yes', next: 'result_ig1', action: 'setSubOutsourcing' },
+      { label: 'Everything stays within the group', type: 'no', next: 'result_ig1' }
     ]
   },
 
   'q_non_ict_material_non_cif_intragroup': {
-    step: 'STEP 5 / 6',
+    step: 'Step 5 of 6',
     question: 'Is the provider within the same group (intra-group)?',
     hint: '<strong>Intra-group:</strong> provider belongs to the same group/holding. MaRisk AT 9 obligations still apply.',
     answers: [
-      { label: 'YES — intra-group provider', type: 'yes', next: 'q_non_ict_non_cif_intragroup_sub', action: 'setIntragroup' },
-      { label: 'NO — external provider', type: 'no', next: 'result_class1' }
+      { label: 'Intra-group provider', type: 'yes', next: 'q_non_ict_non_cif_intragroup_sub', action: 'setIntragroup' },
+      { label: 'External provider', type: 'no', next: 'result_class1' }
     ]
   },
 
   'q_non_ict_non_cif_intragroup_sub': {
-    step: 'STEP 6 / 6',
+    step: 'Step 6 of 6',
     question: 'Does the intra-group provider use external sub-vendors for this function?',
     hint: 'YES: intra-group entity sub-contracts to an external firm.<br>NO: all delivery remains within the group.',
     answers: [
-      { label: 'YES — sub-outsourcing to an external vendor exists', type: 'yes', next: 'result_ig1', action: 'setSubOutsourcing' },
-      { label: 'NO — everything stays within the group', type: 'no', next: 'result_ig1' }
+      { label: 'Sub-outsourcing to an external vendor exists', type: 'yes', next: 'result_ig1', action: 'setSubOutsourcing' },
+      { label: 'Everything stays within the group', type: 'no', next: 'result_ig1' }
     ]
   },
 
   'q_non_ict_non_material_intragroup': {
-    step: 'STEP 4 / 5',
+    step: 'Step 4 of 5',
     question: 'Is the provider within the same group (intra-group)?',
     hint: '<strong>Intra-group:</strong> provider belongs to the same group/holding. Document and periodically review even for non-material arrangements.',
     answers: [
-      { label: 'YES — intra-group provider', type: 'yes', next: 'result_class2', action: 'setIntragroup' },
-      { label: 'NO — external provider', type: 'no', next: 'result_class2' }
+      { label: 'Intra-group provider', type: 'yes', next: 'result_class2', action: 'setIntragroup' },
+      { label: 'External provider', type: 'no', next: 'result_class2' }
     ]
   },
 
   'q_non_material': {
-    step: 'STEP 4 / 5',
+    step: 'Step 4 of 5',
     question: "Does the ICT service still have access to the institution's systems or data?",
     hint: 'YES: vendor has read/write access to institution systems or data.<br>NO: standalone service with no integration to institution infrastructure.',
     answers: [
-      { label: 'YES — has access to systems/data', type: 'yes', next: 'result_class6' },
-      { label: 'NO — no access', type: 'no', next: 'result_class6' }
+      { label: 'Has access to systems/data', type: 'yes', next: 'result_class6' },
+      { label: 'No access', type: 'no', next: 'result_class6' }
     ]
   },
 
@@ -314,7 +314,7 @@ const results = {
   // ── CLASS 1 — MATERIAL OUTSOURCING, External (non-ICT) ──
   'result_class1': {
     bafin_required: true,
-    title: 'MATERIAL OUTSOURCING — External',
+    title: 'Material outsourcing — external',
     alert: { type: 'warning', text: 'Full MaRisk AT 9 and EBA GL requirements apply. DORA ICT-specific requirements do not apply to this arrangement. Institution-level DORA obligations (Art. 6, Art. 28) apply regardless.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Material outsourcing — full requirements' },
@@ -353,7 +353,7 @@ const results = {
   // ── CLASS 2 — NON-MATERIAL OUTSOURCING, non-Critical Function ──
   'result_class2': {
     bafin_required: false,
-    title: 'NON-MATERIAL OUTSOURCING — non-Critical Function',
+    title: 'Non-material outsourcing — non-critical function',
     alert: { type: 'warning', text: 'Standard MaRisk requirements apply. No BaFin notification required. Periodic classification review required.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Non-material outsourcing — standard requirements' },
@@ -380,7 +380,7 @@ const results = {
   // ── CLASS 3 — ICT SERVICE, External (pure ICT, not outsourcing) ──
   'result_class3': {
     bafin_required: false,
-    title: 'ICT SERVICE — External (not outsourcing)',
+    title: 'ICT service — external (not outsourcing)',
     alert: { type: 'warning', text: 'This is an ICT service that is not outsourcing under MaRisk AT 9. DORA requirements apply. No BaFin notification required.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'N/A — not outsourcing' },
@@ -410,7 +410,7 @@ const results = {
   // ── CLASS 4 — MATERIAL OUTSOURCING, ICT, Critical Function ──
   'result_class4': {
     bafin_required: true,
-    title: 'MATERIAL OUTSOURCING — ICT, Critical Function',
+    title: 'Material outsourcing — ICT, critical function',
     alert: { type: 'warning', text: 'Full MaRisk AT 9, EBA GL CIF, and DORA requirements apply. Highest regulatory burden.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Material outsourcing — full requirements' },
@@ -446,7 +446,7 @@ const results = {
   // ── CLASS 5 — MATERIAL OUTSOURCING, ICT, non-Critical Function ──
   'result_class5': {
     bafin_required: true,
-    title: 'MATERIAL OUTSOURCING — ICT, non-Critical Function',
+    title: 'Material outsourcing — ICT, non-critical function',
     alert: { type: 'warning', text: 'Full MaRisk AT 9 requirements apply. DORA Art. 30(2) applies. Art. 30(3) enhanced clauses do not apply — non-CIF arrangement.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Material outsourcing — full requirements' },
@@ -481,7 +481,7 @@ const results = {
   // ── CLASS 6 — NON-MATERIAL ICT SERVICE, non-Critical Function (Outsourcing + ICT) ──
   'result_class6': {
     bafin_required: false,
-    title: 'NON-MATERIAL ICT SERVICE — non-Critical Function (Outsourcing + ICT)',
+    title: 'Non-material ICT service — non-critical function (outsourcing + ICT)',
     alert: { type: 'warning', text: 'DORA Art. 30(2) applies regardless of materiality. Register of Information entry required. Periodic classification review required.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Standard requirements' },
@@ -511,7 +511,7 @@ const results = {
   // ── IG1 — INTRA-GROUP, Material Outsourcing (non-ICT) ──
   'result_ig1': {
     bafin_required: true,
-    title: 'INTRA-GROUP — Material Outsourcing',
+    title: 'Intra-group — material outsourcing',
     alert: { type: 'warning', text: 'Intra-group status does not exempt this arrangement from MaRisk AT 9 requirements. DORA institution-level obligations apply regardless.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Material outsourcing intra-group — simplified due diligence permitted' },
@@ -543,7 +543,7 @@ const results = {
   // ── IG2 — INTRA-GROUP, Material Outsourcing, ICT, Critical Function ──
   'result_ig2': {
     bafin_required: true,
-    title: 'INTRA-GROUP — MATERIAL OUTSOURCING, ICT, Critical Function',
+    title: 'Intra-group — material outsourcing, ICT, critical function',
     alert: { type: 'warning', text: 'Intra-group status does not exempt this arrangement from DORA requirements. DORA Art. 28(8) exit strategy is required regardless of MaRisk intra-group exemption.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Material outsourcing intra-group — simplified due diligence permitted' },
@@ -579,7 +579,7 @@ const results = {
   // ── IG3 — INTRA-GROUP, Material Outsourcing, ICT, non-Critical Function ──
   'result_ig3': {
     bafin_required: true,
-    title: 'INTRA-GROUP — MATERIAL OUTSOURCING, ICT, non-Critical Function',
+    title: 'Intra-group — material outsourcing, ICT, non-critical function',
     alert: { type: 'warning', text: 'Intra-group status does not exempt this arrangement from DORA requirements. MaRisk intra-group exemption applies — no exit plan required.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Material outsourcing intra-group — simplified due diligence permitted' },
@@ -613,7 +613,7 @@ const results = {
 
   // ── EXIT NODE — External Procurement ──
   'result_external_procurement': {
-    title: 'OTHER EXTERNAL PROCUREMENT — outside outsourcing scope',
+    title: 'Other external procurement — outside outsourcing scope',
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Other external procurement (not outsourcing)' },
       { type: 'dora', label: 'DORA', value: 'DORA Art. 30 N/A — verify no ICT components exist' },
@@ -638,7 +638,7 @@ const results = {
 
   // ── EXIT NODE — External Procurement with Data Access ──
   'result_external_procurement_data': {
-    title: 'EXTERNAL PROCUREMENT — Data Protection Obligations Apply',
+    title: 'External procurement — data protection obligations apply',
     alert: { type: 'warning', text: 'This arrangement is outside the outsourcing scope but involves access to systems, customer data, or personal data. GDPR and data protection obligations apply.' },
     classifications: [
       { type: 'marisk', label: 'MaRisk AT 9', value: 'Outside outsourcing scope' },
